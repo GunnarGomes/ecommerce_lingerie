@@ -7,6 +7,7 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nome
 
+
 class Produto(models.Model):
     nome = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
