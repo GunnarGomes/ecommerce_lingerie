@@ -16,6 +16,7 @@ class Produto(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     imagem = models.ImageField(upload_to='produtos/')  # precisa do Pillow
     disponivel = models.BooleanField(default=True)
+    estoque = models.PositiveIntegerField(default=0)
     criado_em = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
