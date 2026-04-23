@@ -70,3 +70,23 @@ def finalizar_carrinho(request):
     
     messages.success(request, 'Carrinho finalizado com sucesso! Obrigado pela sua compra.')
     return redirect('produtos:lista_produtos')
+
+@login_required
+def limpar_carrinho(request):
+    carrinho = Carrinho.objects.filter(usuario=request.user, finalizado=False).first()
+    
+    if carrinho:
+        carrinho.itens.all().delete()
+        messages.success(request, 'Carrinho limpo com sucesso.')
+    else:
+        messages.error(request, 'Não há carrinho para limpar.')
+    
+    return redirect('carrinho:ver_carrinho')
+
+@login_required
+def count_carrinho(request):
+    carrinho = Carrinho.objects.filter(usuario=request.user, finalizado=False).first()
+    count = 0
+    if carrinho:
+        count = carrinho.itens.count()
+    return {'count_carrinho': count}
