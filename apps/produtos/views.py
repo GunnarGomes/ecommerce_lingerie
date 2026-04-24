@@ -29,6 +29,21 @@ def detalhe_produto(request, produto_slug):
     return render(request, 'produtos/detalhe_produto.html', {'produto': produto})
 
 
+def busca_produtos(request):
+    query = request.GET.get('q')
+    produtos = Produto.objects.filter(disponivel=True)
+
+    if query:
+        produtos = produtos.filter(nome__icontains=query) | produtos.filter(descricao__icontains=query)
+
+    paginator = Paginator(produtos, 10)  # Exibe 10 produtos por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'produtos/busca_produtos.html', {
+        'query': query,
+        'produtos': page_obj,
+    })
 
 @login_required
 def adicionar_ao_carrinho(request, produto_id):
